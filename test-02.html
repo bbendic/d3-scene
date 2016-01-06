@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>D3 Scene - Test2</title>
+    
+    <style>
+        html,body{margin: 0; padding: 0; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 13px;  line-height: 18px;}
+        
+        .bar {margin: 3px; height: 20px; background-color: blue; color: white;}
+        .bar span { margin-left: 5px;}
+    </style>
+
+    <script src="lib/d3/d3.js"></script>
+    <script src="lib/jquery/jquery-1.11.1.min.js"></script>
+    <script src="d3-scene.js"></script>
+    <script>
+    function initialize(){
+        scene = new D3Scene('#barChart');
+
+        scene.setSceneObjectDefinition({
+           create: function(data) {
+               return d3.select(document.createElement('div'))
+               .classed('bar', true)
+               .html('<span>' + data.id + '</span>');
+           },
+           update: function(elementSelection, data) {
+               elementSelection.style('width', data.value + 'px');
+           }
+       });
+
+        scene.data([
+           {id: 'A', value: 100},
+           {id: 'B', value: 150},
+           {id: 'C', value: 80},
+           {id: 'D', value: 120},
+           {id: 'E', value: 90}
+        ]);
+
+        scene.update();
+
+        scene2 = new D3Scene('#svgChart');
+        scene2.setSceneObjectDefinition({
+               create: function(data) {
+                   var element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                   element.setAttribute('cx', 50 + 500 * Math.random());
+                   element.setAttribute('cy', 50 + 500 * Math.random());
+                   element.setAttribute('stroke', 'black');
+                   element.setAttribute('stroke-width', '3');
+                   element.setAttribute('fill', 'red');
+                   return element;
+               },
+               update: function(elementSelection, data) {
+                   elementSelection.attr('r', data.value/6 + 'px');
+               }
+        });
+
+        scene2.data(scene.data());
+        scene2.update();
+    }
+    </script>
+
+</head>
+<body onload="initialize()">
+    <div id="barChart" class="scene"></div>
+    <div class="scene"><svg id="svgChart" height="800" width="800"></div>
+</body>
+    
+</html>

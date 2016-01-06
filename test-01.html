@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>D3 Scene - Test 01</title>
+    
+    <style>
+        html,body{margin: 0; padding: 0; font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 13px;  line-height: 18px;}
+        .all {position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: #ffffff;}
+         circle {
+     stroke: #006600;
+     fill  : #00cc00;
+  }
+        circle:hover  {    stroke-width:10px;  }
+    </style>
+    
+</head>
+<body >
+
+
+<!-- SCRIPT_BEGIN -->
+<script src="lib/jquery/jquery-1.11.1.js"></script>
+<script src="lib/angular/angular.js"></script>
+<script src="lib/d3/d3.js"></script>
+<script src="d3-scene.js"></script>
+<!-- SCRIPT_END -->
+    
+    <div class="all">
+        <svg height="100%" width="100%">
+        </svg>
+    </div>
+
+<script>
+$(document).ready(function(){
+    var data = [
+       {id: 'A', r: 100, cx:0.5, cy:0.5},
+       {id: 'B', r: 60, cx:0.8, cy:0.2},
+       {id: 'C', r: 80,  cx:0.3, cy:0.6},
+       {id: 'D', r: 120, cx:0.7, cy:0.7},
+       {id: 'E', r: 90,  cx:0.1, cy:0.2}
+    ];
+    
+    window.scene = new D3Scene('svg');
+    
+    
+    scene.setSceneObjectDefinition({
+
+        create: function(data) {
+            var circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            return d3.select(circle).classed('circle', true)
+        },
+
+        update: function(elementSelection, data) {
+            var W = $('.all').width();
+            var H = $('.all').height();
+            var S = Math.min(W/1280, H/1024);
+            
+            elementSelection
+                .attr('r', data.r * S + 'px')
+                .attr('cx', data.cx * W + 'px')
+                .attr('cy', data.cy * H + 'px');
+        }
+});
+
+
+scene.data(data).update();
+
+
+})
+</script>
+</body>
+</html>
